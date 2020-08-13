@@ -1,0 +1,41 @@
+class Solution {
+public:
+    
+    vector<int> findPath(int node,string &labels,vector<vector<int>>&v,vector<int>&res,bool visited[]){
+       
+        visited[node]=true;
+        vector<int>count(26);
+        for(int j:v[node]){
+            
+            if(!visited[j]){
+               vector<int>cn=findPath(j,labels,v,res,visited); 
+               for(int i=0;i<26;i++)
+                   count[i]+=cn[i];
+            }
+        }
+        
+        char ch=labels[node];
+        count[ch-'a']++;
+        res[node]=count[ch-'a'];
+        return count;
+
+    }
+
+    vector<int> countSubTrees(int n, vector<vector<int>>& edges, string labels) {
+        
+         vector<vector<int>>v(n);
+         vector<int>res(n);
+         bool visited[n];
+         for(int i=0;i<edges.size();i++){
+             v[edges[i][0]].push_back(edges[i][1]);
+             v[edges[i][1]].push_back(edges[i][0]);
+             
+         }
+        
+        
+         for(int i=0;i<n;i++)
+             visited[i]=false;
+         findPath(0,labels,v,res,visited);
+         return res;
+    }
+};
